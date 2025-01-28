@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Display">
       <UniqueIdentifier>{59d59357-b20b-4f35-91fc-b7c4105fb9d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{d34fd945-f092-419b-9d57-24d20628559a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MinecraftBeta.cpp">
@@ -24,9 +27,15 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source Files\Display</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
