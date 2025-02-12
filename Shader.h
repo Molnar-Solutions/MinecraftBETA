@@ -35,9 +35,20 @@ public:
 
 	void CompileProgram();
 
+	void LoadUniformVariables();
+
+	/* Setters for uniform variables */
+	void SetTransformationMatrix(glm::mat4 model);
+
+	/* Getters for uniform variable locations */
+	GLuint GetTransformationMatrixLocation() { return location_transformationMatrix; }
+
 	~Shader();
-private:
+private: 
 	GLuint shaderID;
+
+	/* Uniform variable locations */
+	GLuint location_transformationMatrix;
 
 	void CompileShader(
 		const char* vertexCode,

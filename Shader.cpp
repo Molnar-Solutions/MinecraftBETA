@@ -86,6 +86,20 @@ void Shader::CompileProgram()
         printf("Error linking program: '%s'\n", eLog);
         return;
     }
+
+    /* Read uniform variable locations */
+    LoadUniformVariables();
+}
+
+void Shader::LoadUniformVariables()
+{
+    location_transformationMatrix = glGetUniformLocation(shaderID, "transformationMatrix");
+}
+
+/* Setters for uniform variables */
+void Shader::SetTransformationMatrix(glm::mat4 model)
+{   
+    glUniformMatrix4fv(location_transformationMatrix, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
