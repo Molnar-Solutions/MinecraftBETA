@@ -94,12 +94,24 @@ void Shader::CompileProgram()
 void Shader::LoadUniformVariables()
 {
     location_transformationMatrix = glGetUniformLocation(shaderID, "transformationMatrix");
+    location_viewMatrix = glGetUniformLocation(shaderID, "view");
+    location_projectionMatrix = glGetUniformLocation(shaderID, "projection");
 }
 
 /* Setters for uniform variables */
 void Shader::SetTransformationMatrix(glm::mat4 model)
 {   
     glUniformMatrix4fv(location_transformationMatrix, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+void Shader::SetProjectionMatrix(glm::mat4 model)
+{
+    glUniformMatrix4fv(location_projectionMatrix, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+void Shader::SetViewMatrix(glm::mat4 model)
+{
+    glUniformMatrix4fv(location_viewMatrix, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)

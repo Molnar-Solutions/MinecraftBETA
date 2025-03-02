@@ -5,5 +5,6 @@ C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftB
 C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftBeta\Window.h(16,37): warning C4244: 'return': conversion from 'GLint' to 'GLfloat', possible loss of data
   (compiling source file 'MinecraftBeta.cpp')
   
-C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftBeta\MinecraftBeta.cpp(76,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftBeta\MinecraftBeta.cpp(99,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftBeta\MinecraftBeta.cpp(105,50): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
   MinecraftBeta.vcxproj -> C:\Users\DanielMolnar\OneDrive\Documentos\Visual Studio 2022\Projects\MinecraftBeta\Debug\MinecraftBeta.exe

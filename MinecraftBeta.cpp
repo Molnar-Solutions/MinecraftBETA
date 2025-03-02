@@ -17,14 +17,22 @@
 
 #include "CommonValues.h"
 #include "Model.h"
+#include "Camera.h"
 
-Shader* shader = new Shader();
+/* Instances */
+Shader* shader;
+Camera* camera;
 
 double deltaTime = 0.0f;
 double lastTime = 0.0f;
 
+/* Entities */
 std::vector<Model*> entities;
+
+/* Uniforms */
 glm::mat4 transformationMatrix(1.0f);
+glm::mat4 projectionMatrix(1.0f);
+glm::mat4 viewMatrix(1.0f);
 
 void PreDraw(GLenum status, GLenum error)
 {
@@ -53,6 +61,17 @@ int main()
     Window mainWindow = Window(SCREEN_WIDTH, SCREEN_HEIGHT);
     mainWindow.Initialise();
 
+    /* Initialization */
+    GLfloat startCameraMoveSpeed = 5.0f;
+    GLfloat startCameraTurnSpeed = 0.25f;
+
+    shader = new Shader();
+    camera = new Camera(
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        -90.0f, 0.0f, startCameraMoveSpeed, startCameraTurnSpeed
+    );
+
     /* Create shaders */
     shader->CreateFromFiles(
         "shaders/shader.vert",
@@ -61,7 +80,7 @@ int main()
 
     /* Add some models */
     Model* tree = new Model();
-    tree->LoadModel("Models/Tree/Tree.obj", "Tree");
+    tree->LoadModel("Models/Box/Box.obj", "Box");
     tree->setPosition(0.0f, -2.15f, -0.5f);
     tree->setScale(1.0f, 1.0f, 1.0f);
     tree->calculateBoundingBox();
@@ -69,6 +88,10 @@ int main()
 
     GLenum status{};
     GLenum error{};
+
+    projectionMatrix = glm::perspective(glm::radians(86.0f),
+        (GLfloat)mainWindow.GetBufferWidth() / (GLfloat)mainWindow.GetBufferHeight(),
+        0.1f, 100.0f);
 
     /* Main game loop */
     while (!mainWindow.GetShouldClose())
@@ -79,20 +102,25 @@ int main()
 
         PreDraw(status, error);
 
+        camera->keyControl(mainWindow.getKeys(), deltaTime);
+        camera->mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+        viewMatrix = camera->calculateViewMatrix();
+
         shader->UseShader();
         shader->Validate();
+
+        shader->SetProjectionMatrix(projectionMatrix);
+        shader->SetViewMatrix(viewMatrix);
 
         /* Render entites */
         for (auto e : entities)
         {
-            GLuint transformationMatrixLocation = shader->GetTransformationMatrixLocation();
-
             transformationMatrix = glm::mat4(1.0f);
             transformationMatrix = glm::translate(transformationMatrix, tree->GetPosition());
             transformationMatrix = glm::scale(transformationMatrix, tree->GetScale());
 
-            glUniformMatrix4fv(transformationMatrixLocation, 1,
-                GL_FALSE, glm::value_ptr(transformationMatrix));
+            shader->SetTransformationMatrix(transformationMatrix);
 
             tree->RenderModel();
         }

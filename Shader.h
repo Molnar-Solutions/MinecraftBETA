@@ -39,16 +39,22 @@ public:
 
 	/* Setters for uniform variables */
 	void SetTransformationMatrix(glm::mat4 model);
+	void SetProjectionMatrix(glm::mat4 model);
+	void SetViewMatrix(glm::mat4 model);
 
 	/* Getters for uniform variable locations */
 	GLuint GetTransformationMatrixLocation() { return location_transformationMatrix; }
+	GLuint GetProjectionMatrixLocation() { return location_projectionMatrix; }
+	GLuint GetViewMatrixLocation() { return location_viewMatrix; }
 
 	~Shader();
 private: 
 	GLuint shaderID;
 
 	/* Uniform variable locations */
-	GLuint location_transformationMatrix;
+	GLuint location_transformationMatrix,
+		location_projectionMatrix,
+		location_viewMatrix;
 
 	void CompileShader(
 		const char* vertexCode,
