@@ -18,10 +18,17 @@
 #include "CommonValues.h"
 #include "Model.h"
 #include "Camera.h"
+#include "EntityShader.h"
+#include "TerrainShader.h"
+#include "Chunk.h"
 
-/* Instances */
-Shader* shader;
 Camera* camera;
+
+/* Shaders */
+EntityShader* entityShader;
+TerrainShader* terrainShader;
+
+Chunk* chunk;
 
 double deltaTime = 0.0f;
 double lastTime = 0.0f;
@@ -65,7 +72,6 @@ int main()
     GLfloat startCameraMoveSpeed = 5.0f;
     GLfloat startCameraTurnSpeed = 0.25f;
 
-    shader = new Shader();
     camera = new Camera(
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 1.0f, 0.0f),
@@ -73,10 +79,20 @@ int main()
     );
 
     /* Create shaders */
-    shader->CreateFromFiles(
+    entityShader = new EntityShader();
+    entityShader->CreateFromFiles(
         "shaders/shader.vert",
         "shaders/shader.frag"
     );
+
+    terrainShader = new TerrainShader();
+    terrainShader->CreateFromFiles(
+        "shaders/terrainShader.vert",
+        "shaders/terrainShader.frag"
+    );
+
+	/* Create chunk */
+	chunk = new Chunk(0.0f, 0.0f);
 
     /* Add some models */
     Model* tree = new Model();
@@ -107,26 +123,44 @@ int main()
 
         viewMatrix = camera->calculateViewMatrix();
 
-        shader->UseShader();
-        shader->Validate();
 
-        shader->SetProjectionMatrix(projectionMatrix);
-        shader->SetViewMatrix(viewMatrix);
 
-        /* Render entites */
+		/* Render entities */
+        entityShader->UseShader();
+        entityShader->Validate();
+
+        entityShader->SetProjectionMatrix(projectionMatrix);
+        entityShader->SetViewMatrix(viewMatrix);
+
         for (auto e : entities)
         {
             transformationMatrix = glm::mat4(1.0f);
             transformationMatrix = glm::translate(transformationMatrix, tree->GetPosition());
             transformationMatrix = glm::scale(transformationMatrix, tree->GetScale());
 
-            shader->SetTransformationMatrix(transformationMatrix);
+            entityShader->SetTransformationMatrix(transformationMatrix);
 
             tree->RenderModel();
         }
 
-        glUseProgram(0);
+        entityShader->StopShader();
 
+
+
+		/* Render terrain */
+        terrainShader->UseShader();
+		terrainShader->Validate();
+
+		terrainShader->SetProjectionMatrix(projectionMatrix);
+		terrainShader->SetViewMatrix(viewMatrix);
+        terrainShader->SetSideTexture(1);
+		terrainShader->SetTopTexture(2);
+
+		chunk->Render();
+
+        terrainShader->StopShader();
+
+		/* Swap buffers */
         mainWindow.swapBuffers();
     }
 

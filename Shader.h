@@ -23,38 +23,21 @@ public:
 		const char* fragmentLocation
 	);
 
-	void Validate();
-
 	std::string ReadFile(
 		const char* fileLocation
 	);
 
 	void UseShader();
 	void ClearShader();
+	void Validate();
 	void StopShader() { glUseProgram(0); }
 
-	void CompileProgram();
-
-	void LoadUniformVariables();
-
-	/* Setters for uniform variables */
-	void SetTransformationMatrix(glm::mat4 model);
-	void SetProjectionMatrix(glm::mat4 model);
-	void SetViewMatrix(glm::mat4 model);
-
-	/* Getters for uniform variable locations */
-	GLuint GetTransformationMatrixLocation() { return location_transformationMatrix; }
-	GLuint GetProjectionMatrixLocation() { return location_projectionMatrix; }
-	GLuint GetViewMatrixLocation() { return location_viewMatrix; }
+	virtual void CompileProgram();
+	virtual void LoadUniformVariables();
 
 	~Shader();
-private: 
+protected: 
 	GLuint shaderID;
-
-	/* Uniform variable locations */
-	GLuint location_transformationMatrix,
-		location_projectionMatrix,
-		location_viewMatrix;
 
 	void CompileShader(
 		const char* vertexCode,
